@@ -1,18 +1,11 @@
-local Player = {}
-Player.height = 30
-Player.width = 30
-Player.x = 500
-Player.y = 500
-Player.speed = 100
+Player = Prop:extend()
 
-function Player.Move(xAmount, yAmount)
-    Player.x = Player.x + xAmount
-    Player.y = Player.y + yAmount
+function Player:new(height, width, x, y)
+    Player.super:new(height, width, x, y)
+    self.speed = 100
 end
 
-function Player.SetPosition(xPos, yPos)
-    Player.x = xPos
-    Player.y = yPos
+function Player:Move(xAmount, yAmount)
+    self.x = self.x + xAmount
+    self.y = self.y + yAmount
 end
-
-return Player
