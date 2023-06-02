@@ -3,7 +3,7 @@ require "prop"
 require "player"
 require "helpers"
 
-local Player = Player("Player", "character", "Assets/character.png", 0.1, 0.1, 100, 100, 0, true)
+local Player = Player("Player", "character", "Assets/character.png", -0.1, 0.1, 100, 100, 0, true)
 local Objects = {}
 
 function love.load()

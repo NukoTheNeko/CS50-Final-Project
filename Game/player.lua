@@ -39,4 +39,15 @@ function Player:update(dt)
     end
 
     self:Move(xMovement,yMovement)
+
+    local mouseX, mouseY = love.mouse.getPosition()
+    local angle = math.atan2(mouseY - self.yPos, mouseX - self.xPos)
+
+    if math.abs(angle) > 1 then
+        self:SetScale(-0.1, -0.1)
+    else
+        self:SetScale(-0.1, 0.1)
+    end
+
+    self:SetRotation(angle)
 end
