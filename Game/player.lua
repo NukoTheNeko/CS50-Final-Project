@@ -5,9 +5,15 @@ function Player:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, has
     self.speed = 100
 end
 
-function Player:isColliding(other)
+function Player:collisionEnter(other)
     if other.tag == "rock" then
-        Player:SetColor(255, 123, 123, 255)
+        self:SetColor(255, 123, 123, 255)
+    end
+end
+
+function Player:collisionExit(other)
+    if other.tag == "rock" then
+        self:SetColor(123, 123, 255, 255)
     end
 end
 

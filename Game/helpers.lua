@@ -17,3 +17,12 @@ function CheckCollision(prop1, prop2)
         and prop1Bottom > prop2Top
         and prop1Top < prop2Bottom
 end
+
+function TableContains(tableToSearch, toFind)
+    for i, element in pairs(tableToSearch) do
+        if element == toFind then 
+            return i
+        end
+    end
+    return 0
+end

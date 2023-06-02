@@ -32,6 +32,7 @@ function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCo
 
 
     self.hasCollision = hasCollision
+    self.collisionMatrix = {}
 end
 
 
@@ -42,6 +43,16 @@ end
 
 
 function Prop:isColliding(other)
+end
+
+
+
+function Prop:collisionEnter(other)
+end
+
+
+
+function Prop:collisionExit(other)
 end
 
 

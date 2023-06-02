@@ -20,10 +20,24 @@ function love.update(dt)
     for index, object in ipairs(Objects) do
         object:update(dt)
         for i = index + 1, #Objects do
-            if CheckCollision(object,Objects[i]) and object.hasCollision and Objects[i].hasCollision then
+            if not object.hasCollision or not Objects[i].hasCollision then
+                goto continue
+            end
+            local temp = TableContains(object.collisionMatrix, Objects[i])
+            if CheckCollision(object,Objects[i]) then
+                if temp == 0 then
+                    table.insert(object.collisionMatrix, Objects[i])
+                    object:collisionEnter(Objects[i])
+                    Objects[i]:collisionEnter(object)
+                end
                 object:isColliding(Objects[i])
                 Objects[i]:isColliding(object)
+            elseif temp ~= 0 then
+                table.remove(object.collisionMatrix, temp)
+                object:collisionExit(Objects[i])
+                Objects[i]:collisionExit(object)
             end
+            ::continue::
         end
     end
 end
