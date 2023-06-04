@@ -1,4 +1,5 @@
 Animation = Object:extend()
+require("helpers")
 
 function Animation:new(spriteSheet, totalFrames, hFrameCount, vFrameCount, firstHFrame, firstVFrame,frameWidth, frameHeight, outerBorder, innerBorder)
     self.spriteSheet = love.graphics.newImage(spriteSheet)
@@ -20,8 +21,8 @@ function Animation:new(spriteSheet, totalFrames, hFrameCount, vFrameCount, first
     end
 end
 
-function Animation:Play(dt, speed)
-    self.currentFrame = self.currentFrame + speed * dt  
+function Animation:Play(speed)
+    self.currentFrame = self.currentFrame + speed * DeltaTime
     if math.floor(self.currentFrame) > self.totalFrames then
         self.currentFrame = 1
     end

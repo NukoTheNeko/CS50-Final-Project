@@ -16,6 +16,7 @@ function love.load()
 end
 
 function love.update(dt)
+    DeltaTime = dt
     for index, object in ipairs(Objects) do
         object:update(dt)
         for i = index + 1, #Objects do

@@ -1,8 +1,12 @@
 Prop = Object:extend()
+require("animation")
 
 function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision)
     self.sprite = love.graphics.newImage(sprite)
 
+    self.animations = {}
+    self.animationNum = 0
+    self.animationSpeed = 5
 
     self.xScale = xScale
     self.width = xScale * self.sprite:getWidth()
@@ -122,5 +126,15 @@ end
 
 function Prop:draw()
     love.graphics.setColor(self.red, self.green, self.blue, self.alpha)
-    love.graphics.draw(self.sprite, self.xPos, self.yPos, self.rotation, self.xScale, self.yScale, self.xPivot, self.yPivot)
+    if self.animationNum == 0 then
+        love.graphics.draw(self.sprite, self.xPos, self.yPos, self.rotation, self.xScale, self.yScale, self.xPivot, self.yPivot)
+    else
+        local animation = self.animations[self.animationNum]
+        animation:Play(self.animationSpeed) 
+        love.graphics.draw(animation.spriteSheet,
+            animation.frames[math.floor(animation.currentFrame)],
+            self.xPos, self.yPos, self.rotation,
+            self.xScale, self.yScale,
+            animation.xPivot, animation.yPivot)
+    end
 end

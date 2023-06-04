@@ -1,6 +1,8 @@
 WindowWidth = love.graphics.getWidth()
 WindowHeight = love.graphics.getHeight()
 
+DeltaTime = 0
+
 function CheckCollision(prop1, prop2)
     local prop1Left = prop1.xPos
     local prop1Right = prop1.xPos + prop1.width
