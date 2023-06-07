@@ -6,7 +6,7 @@ require "player"
 require "helpers"
 require "tilemap"
 
-local Player = Player("Player", "character", "Assets/anim.png", 1, 1, 100, 100, 0, true)
+local Player = Player("Player", "character", "Assets/anim.png", 3, 3, 100, 100, 0, true)
 local Grid = {
                 {1,2,2,2,2,2,2,3},
                 {7,8,8,8,8,8,8,9},
@@ -18,7 +18,7 @@ local Grid = {
                 {37,38,38,38,38,38,38,39},
                 {43,44,44,44,44,44,44,45}
             }
-local Tiles = TileMap("Assets/tileset.png",16,16,0,0,1)
+local Tiles = TileMap("Assets/tileset.png",16,16,0,0,3)
 
 local Objects = {}
 
