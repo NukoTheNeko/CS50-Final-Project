@@ -6,7 +6,6 @@ require "player"
 require "helpers"
 require "tilemap"
 
-local Player = Player("Player", "character", "Assets/anim.png", 3, 3, 100, 100, 0, true)
 local Grid = {
                 {1,2,2,2,2,2,2,3},
                 {7,8,8,8,8,8,8,9},
@@ -18,24 +17,33 @@ local Grid = {
                 {37,38,38,38,38,38,38,39},
                 {43,44,44,44,44,44,44,45}
             }
-local Tiles = TileMap("Assets/tileset.png",16,16,0,0,3)
-
-local Objects = {}
 
 function love.load()
+    love.graphics.setDefaultFilter("nearest", "nearest")
+    love.graphics.setBackgroundColor(0, 0.66, 0)
+    Objects = {}
+    Tiles = TileMap("Assets/tileset.png",16,16,0,0,6)
+    Player = Player("Player", "character", "Assets/MainCharacter.png", 1, 1, 0, 0, 0, true, true)
     table.insert(Objects,Player)
-    table.insert(Objects,Prop("Rock1", "rock", "Assets/rock.png", 0.1, 0.1, 200, 200, 0, true))
-    table.insert(Objects,Prop("Rock2", "rock", "Assets/rock.png", 0.1, 0.1, 200, 300, 0, true))
-    table.insert(Objects,Prop("Rock3", "rock", "Assets/rock.png", 0.1, 0.1, 300, 200, 0, true))
-    table.insert(Objects,Prop("Rock4", "rock", "Assets/rock.png", 0.1, 0.1, 300, 300, 0, true))
-    love.graphics.setBackgroundColor(0, 0, 0)
+    size = 64
+    width = 6
+    height = 6
+    for i = -size * width, size * width, size do
+        for j = -size * height, size * height, size do
+            if math.abs(i) == size * width or math.abs(j) == size * height then
+                table.insert(Objects,Prop("Box", "box", "Assets/Box.png", 1, 1, i, j, 0, true, true))    
+            end
+        end
+    end
+    table.insert(Objects,Prop("SpikeTrap", "spikes", "Assets/SpikeTrap.png", 1, 1, 128, 128, 0, true, false))   
+    table.insert(Objects,Prop("SpikeTrap", "spikes", "Assets/SpikeTrap.png", 1, 1, -128, -128, 0, true, false))   
 end
 
 function love.update(dt)
     DeltaTime = dt
     for i=#Objects,1,-1 do
         Objects[i]:update(dt)
-        for j=#Objects-i,1,-1 do
+        for j=#Objects-i+1,1,-1 do
             if not Objects[i].hasCollision or not Objects[j].hasCollision then
                 goto continue
             end
@@ -61,7 +69,7 @@ end
 function love.draw()
     love.graphics.scale(1)
     love.graphics.translate(-Player.xPos + WindowWidth/2, -Player.yPos+  WindowHeight/2)
-    Tiles:draw(Grid,300,300)
+    Tiles:draw(Grid,-size * width,-size * height)
     for i=#Objects,1,-1 do
         Objects[i]:draw()
     end

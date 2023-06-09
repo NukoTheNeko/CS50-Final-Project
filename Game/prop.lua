@@ -1,11 +1,11 @@
 Prop = Object:extend()
 require("animation")
 
-function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision)
+function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks)
     self.sprite = love.graphics.newImage(sprite)
 
     self.animations = {}
-    self.animationNum = 0
+    self.animationId = nil
     self.animationSpeed = 5
 
     self.xScale = xScale
@@ -36,6 +36,7 @@ function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCo
 
 
     self.hasCollision = hasCollision
+    self.blocks = blocks
     self.collisionMatrix = {}
 end
 
@@ -71,6 +72,16 @@ end
 function Prop:Move(xAmount, yAmount)
     self.xPos = self.xPos + xAmount
     self.yPos = self.yPos + yAmount
+    if self.blocks then
+        for index, value in ipairs(Objects) do
+            if value.blocks and value ~= self then
+                if CheckCollision(self, value) then
+                    self.xPos = self.xPos - xAmount
+                    self.yPos = self.yPos - yAmount
+                end
+            end
+        end
+    end
 end
 
 
@@ -126,10 +137,10 @@ end
 
 function Prop:draw()
     love.graphics.setColor(self.red, self.green, self.blue, self.alpha)
-    if self.animationNum == 0 then
+    if self.animationId == nil then
         love.graphics.draw(self.sprite, self.xPos, self.yPos, self.rotation, self.xScale, self.yScale, self.xPivot, self.yPivot)
     else
-        local animation = self.animations[self.animationNum]
+        local animation = self.animations[self.animationId]
         animation:Play(self.animationSpeed) 
         love.graphics.draw(animation.spriteSheet,
             animation.frames[math.floor(animation.currentFrame)],

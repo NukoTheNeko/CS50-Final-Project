@@ -1,62 +1,63 @@
 Player = Prop:extend()
 
-function Player:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision)
-    Player.super:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision)
-    self.speed = 100
+function Player:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks)
+    Player.super:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks)
+    self.speed = 250
 
-    self.animationNum = 1;
+    self.animationId = "idledown";
 
-    --idle - 1
-    table.insert(self.animations, Animation("Assets/anim.png", 1, 1,1,1,1,16,17,0,0))
-    --down - 2
-    table.insert(self.animations, Animation("Assets/anim.png", 2, 1,2,1,2,16,17,0,0))
-    --right - 3
-    table.insert(self.animations, Animation("Assets/anim.png", 2, 1,2,2,2,16,17,0,0))
-    --up - 4
-    table.insert(self.animations, Animation("Assets/anim.png", 2, 1,2,3,2,16,17,0,0))
-    --left - 5
-    table.insert(self.animations, Animation("Assets/anim.png", 2, 1,2,4,2,16,17,0,0))
+    self.animations["idledown"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   1,1,   64,64,   4,8)
+    self.animations["idleright"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   2,1,   64,64,   4,8)
+    self.animations["idleleft"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   3,1,   64,64,   4,8)
+    self.animations["idleup"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   4,1,   64,64,   4,8)
+    self.animations["down"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,2,   64,64,   4,8)
+    self.animations["right"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,2,   64,64,   4,8)
+    self.animations["left"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,2,   64,64,   4,8)
+    self.animations["up"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,2,   64,64,   4,8)
 
 end
 
 function Player:collisionEnter(other)
-    if other.tag == "rock" then
+    if other.tag == "spikes" then
         self:SetColor(255, 2, 2, 255)
     end
 end
 
 function Player:collisionExit(other)
-    if other.tag == "rock" then
+    if other.tag == "spikes" then
         self:SetColor(255, 255, 255, 255)
     end
 end
 
 function Player:update(dt)
     if love.keyboard.isDown("return") then
-        self:SetPosition(100,100)
+        self:SetPosition(0,0)
     end
 
     local xMovement = 0
     local yMovement = 0
 
-    if love.keyboard.isDown("d") then
+    if love.keyboard.isDown("lshift") then
+        self.speed = 400
+    else
+        self.speed = 250
+    end
+
+    if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
         xMovement = xMovement + self.speed * dt
-        self.animationNum = 3
-    end
-    if love.keyboard.isDown("a") then
+        self.animationId = "right"
+    elseif love.keyboard.isDown("a") or love.keyboard.isDown("left") then
         xMovement = xMovement - self.speed * dt
-        self.animationNum = 5
-    end   
-    if love.keyboard.isDown("w") then
+        self.animationId = "left"
+    elseif love.keyboard.isDown("w") or love.keyboard.isDown("up") then
         yMovement = yMovement - self.speed * dt
-        self.animationNum = 4
-    end
-    if love.keyboard.isDown("s") then
+        self.animationId = "up"
+    elseif love.keyboard.isDown("s") or love.keyboard.isDown("down") then
         yMovement = yMovement + self.speed * dt
-        self.animationNum = 2
+        self.animationId = "down"
     end
-    if xMovement == 0 and yMovement == 0 then
-        self.animationNum = 1
+    if xMovement == 0 and yMovement == 0 and not string.find(self.animationId,"idle") then
+        self.animationId = "idle" .. self.animationId
     end
 
     self:Move(xMovement,yMovement)
