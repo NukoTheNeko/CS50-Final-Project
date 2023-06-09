@@ -22,6 +22,8 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setBackgroundColor(0, 0.66, 0)
     Objects = {}
+
+    
     Tiles = TileMap("Assets/tileset.png",16,16,0,0,6)
     Player = Player("Player", "character", "Assets/MainCharacter.png", 1, 1, 0, 0, 0, true, true)
     table.insert(Objects,Player)
