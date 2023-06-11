@@ -1,17 +1,18 @@
 Prop = Object:extend()
 require("animation")
 
-function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks)
-    self.sprite = love.graphics.newImage(sprite)
+function Prop:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, visible)
+    self.tilemap = tilemap
+    self.targetTile = targetTile
 
     self.animations = {}
     self.animationId = nil
     self.animationSpeed = 5
 
     self.xScale = xScale
-    self.width = xScale * self.sprite:getWidth()
+    self.width = xScale * tilemap.tileWidth
     self.yScale = yScale
-    self.height = yScale * self.sprite:getHeight()
+    self.height = yScale * tilemap.tileHeight
 
 
     self.xPos = xPos
@@ -21,8 +22,8 @@ function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCo
     self.rotation = rotation
 
 
-    self.xPivot = self.sprite:getWidth()/2
-    self.yPivot = self.sprite:getHeight()/2
+    self.xPivot = tilemap.tileWidth/2
+    self.yPivot = tilemap.tileHeight/2
 
 
     self.red = 1
@@ -38,6 +39,7 @@ function Prop:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCo
     self.hasCollision = hasCollision
     self.blocks = blocks
     self.collisionMatrix = {}
+    self.visible = visible
 end
 
 
@@ -94,9 +96,9 @@ end
 
 function Prop:SetScale(xScale, yScale)
     self.xScale = xScale
-    self.width = xScale * self.sprite:getWidth()
+    self.width = xScale * self.tilemap.tileWidth
     self.yScale = yScale
-    self.height = yScale * self.sprite:getHeight()
+    self.height = yScale * self.tilemap.tileHeight
 end
 
 
@@ -136,9 +138,12 @@ end
 
 
 function Prop:draw()
+    if not self.visible then
+        return
+    end
     love.graphics.setColor(self.red, self.green, self.blue, self.alpha)
     if self.animationId == nil then
-        love.graphics.draw(self.sprite, self.xPos, self.yPos, self.rotation, self.xScale, self.yScale, self.xPivot, self.yPivot)
+        love.graphics.draw(self.tilemap.tileSheet, self.tilemap.tiles[self.targetTile], self.xPos, self.yPos, self.rotation, self.xScale, self.yScale, self.xPivot, self.yPivot)
     else
         local animation = self.animations[self.animationId]
         animation:Play(self.animationSpeed) 

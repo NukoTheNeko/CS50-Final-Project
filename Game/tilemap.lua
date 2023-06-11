@@ -29,3 +29,7 @@ function TileMap:draw(grid, topLeftX, topLeftY)
         end
     end
 end
+
+function TileMap:GetQuad(quadNumber)
+    return self.tiles[quadNumber]
+end

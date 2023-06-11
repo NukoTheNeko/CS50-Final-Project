@@ -7,16 +7,15 @@ require "helpers"
 require "tilemap"
 
 local Grid = {
-                {1,2,2,2,2,2,2,3},
-                {7,8,8,8,8,8,8,9},
-                {7,8,8,8,8,8,8,9},
-                {7,8,8,8,8,8,8,9},
-                {7,8,8,8,8,8,8,9},
-                {31,32,32,32,32,32,32,33},
-                {37,38,38,38,38,38,38,39},
-                {37,38,38,38,38,38,38,39},
-                {43,44,44,44,44,44,44,45}
-            }
+                {3,3,3,3,3,3,3,3},
+                {3,3,3,3,3,3,3,3},
+                {3,3,3,3,3,3,3,3},
+                {2,2,2,2,2,2,2,2},
+                {1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1}
+             }
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -24,8 +23,9 @@ function love.load()
     Objects = {}
 
     
-    Tiles = TileMap("Assets/tileset.png",16,16,0,0,6)
-    Player = Player("Player", "character", "Assets/MainCharacter.png", 1, 1, 0, 0, 0, true, true)
+    Tiles = TileMap("Assets/TileMap.png",64,64,4,8,2)
+    PlayerTiles = TileMap("Assets/MainCharacterAnim.png",64,64,4,8,1)
+    Player = Player("Player", "character", PlayerTiles, 1, 1, 1, 0, 0, 0, true, true, true)
     table.insert(Objects,Player)
     size = 64
     width = 6
@@ -33,12 +33,14 @@ function love.load()
     for i = -size * width, size * width, size do
         for j = -size * height, size * height, size do
             if math.abs(i) == size * width or math.abs(j) == size * height then
-                table.insert(Objects,Prop("Box", "box", "Assets/Box.png", 1, 1, i, j, 0, true, true))    
+                table.insert(Objects,Prop("Box", "box", Tiles, 4, 1, 1, i, j, 0, false, true, true))    
             end
         end
     end
-    table.insert(Objects,Prop("SpikeTrap", "spikes", "Assets/SpikeTrap.png", 1, 1, 128, 128, 0, true, false))   
-    table.insert(Objects,Prop("SpikeTrap", "spikes", "Assets/SpikeTrap.png", 1, 1, -128, -128, 0, true, false))   
+    table.insert(Objects,Prop("SpikeTrap", "spikes",  Tiles, 5, 1, 1, 128, 128, 0, true, false, true))   
+    table.insert(Objects,Prop("SpikeTrap", "spikes",  Tiles, 5, 1, 1, -128, -128, 0, true, false, true))   
+    table.insert(Objects,Prop("Rock", "rocks",  Tiles, 6, 1, 1, -128, 128, 0, false, true, true))   
+    table.insert(Objects,Prop("Rock", "rocks",  Tiles, 6, 1, 1, 128, -128, 0, false, true, true))   
 end
 
 function love.update(dt)
@@ -71,7 +73,7 @@ end
 function love.draw()
     love.graphics.scale(1)
     love.graphics.translate(-Player.xPos + WindowWidth/2, -Player.yPos+  WindowHeight/2)
-    Tiles:draw(Grid,-size * width,-size * height)
+    Tiles:draw(Grid,-600,-800)
     for i=#Objects,1,-1 do
         Objects[i]:draw()
     end

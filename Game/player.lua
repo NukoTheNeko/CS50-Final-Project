@@ -1,8 +1,10 @@
 Player = Prop:extend()
 
-function Player:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks)
-    Player.super:new(name, tag, sprite, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks)
-    self.speed = 250
+function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, visible)
+    Player.super:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, visible)
+    self.defaultSpeed = 250
+    self.sprintSpeed = 400
+    self.speed = self.defaultSpeed
 
     self.animationId = "idledown";
 
@@ -38,9 +40,9 @@ function Player:update(dt)
     local yMovement = 0
 
     if love.keyboard.isDown("lshift") then
-        self.speed = 400
+        self.speed = self.sprintSpeed
     else
-        self.speed = 250
+        self.speed = self.defaultSpeed
     end
 
     if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
