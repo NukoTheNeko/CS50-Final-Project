@@ -80,6 +80,8 @@ function Prop:Move(xAmount, yAmount)
                 if CheckCollision(self, value) then
                     self.xPos = self.xPos - xAmount
                     self.yPos = self.yPos - yAmount
+                    xAmount = 0
+                    yAmount = 0
                 end
             end
         end
