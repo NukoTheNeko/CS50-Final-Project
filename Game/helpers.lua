@@ -4,15 +4,18 @@ WindowHeight = love.graphics.getHeight()
 DeltaTime = 0
 
 function CheckCollision(prop1, prop2)
-    local prop1Left = prop1.xPos
-    local prop1Right = prop1.xPos + prop1.width
-    local prop1Top = prop1.yPos
-    local prop1Bottom = prop1.yPos + prop1.height
+    local prop1Left = prop1.xPos - (prop1.colliderXSize * prop1.xScale / 2)
+    local prop1Right = prop1.xPos + (prop1.colliderXSize * prop1.xScale / 2)
+    local prop1Top = prop1.yPos - (prop1.colliderYSize * prop1.yScale / 2)
+    local prop1Bottom = prop1.yPos + (prop1.colliderYSize * prop1.yScale / 2)
 
-    local prop2Left = prop2.xPos
-    local prop2Right = prop2.xPos + prop2.width
-    local prop2Top = prop2.yPos
-    local prop2Bottom = prop2.yPos + prop2.height
+    local prop2Left = prop2.xPos - (prop2.colliderXSize * prop2.xScale / 2)
+    local prop2Right = prop2.xPos + (prop2.colliderXSize * prop2.xScale / 2)
+    local prop2Top = prop2.yPos - (prop2.colliderYSize * prop2.yScale / 2)
+    local prop2Bottom = prop2.yPos + (prop2.colliderYSize * prop2.yScale / 2)
+
+    love.graphics.setColor(1, 0, 0, 0.4)
+    love.graphics.rectangle("fill",prop1Left,prop1Top,prop1Right-prop1Left,prop1Bottom-prop1Top)
 
     return  prop1Right > prop2Left
         and prop1Left < prop2Right
@@ -27,4 +30,12 @@ function TableContains(tableToSearch, toFind)
         end
     end
     return 0
+end
+
+function Sort(a,b)
+    return a.zIndex > b.zIndex
+end
+
+function TableZSort(tableToSort)
+    table.sort(tableToSort, Sort)
 end

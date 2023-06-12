@@ -1,7 +1,7 @@
 Prop = Object:extend()
 require("animation")
 
-function Prop:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, visible)
+function Prop:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, colliderXSize , colliderYSize, visible, zIndex)
     self.tilemap = tilemap
     self.targetTile = targetTile
 
@@ -10,9 +10,7 @@ function Prop:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, ro
     self.animationSpeed = 5
 
     self.xScale = xScale
-    self.width = xScale * tilemap.tileWidth
     self.yScale = yScale
-    self.height = yScale * tilemap.tileHeight
 
 
     self.xPos = xPos
@@ -40,6 +38,12 @@ function Prop:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, ro
     self.blocks = blocks
     self.collisionMatrix = {}
     self.visible = visible
+
+    self.colliderXSize = colliderXSize
+    self.colliderYSize = colliderYSize
+
+    self:ChangeZIndex(-1)
+    self:ChangeZIndex(zIndex)
 end
 
 
@@ -55,11 +59,13 @@ end
 
 
 function Prop:collisionEnter(other)
+    self:SetColor(2, 255, 2, 255)
 end
 
 
 
 function Prop:collisionExit(other)
+    self:SetColor(255, 255, 255, 255)
 end
 
 
@@ -98,16 +104,17 @@ end
 
 function Prop:SetScale(xScale, yScale)
     self.xScale = xScale
-    self.width = xScale * self.tilemap.tileWidth
     self.yScale = yScale
-    self.height = yScale * self.tilemap.tileHeight
 end
 
 
 
 function Prop:SetPivot(xPivot, yPivot)
-    self.xPivot = xPivot
-    self.yPivot = yPivot
+    if xPivot > 1 or xPivot < 0 or yPivot > 1 or yPivot < 0 then
+        return
+    end
+    self.xPivot = xPivot * self.tilemap.tileWidth
+    self.yPivot = self.tilemap.tileHeight - (yPivot * self.tilemap.tileHeight)
 end
 
 
@@ -135,6 +142,13 @@ end
 
 function Prop:SetCollision(hasCollision)
     self.hasCollision = hasCollision
+end
+
+
+
+function Prop:ChangeZIndex(zIndex)
+    self.zIndex = zIndex
+    TableZSort(Objects)
 end
 
 

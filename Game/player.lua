@@ -1,7 +1,7 @@
 Player = Prop:extend()
 
-function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, visible)
-    Player.super:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, visible)
+function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, colliderXSize , colliderYSize, visible, zIndex)
+    Player.super:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, colliderXSize , colliderYSize, visible, zIndex)
     self.defaultSpeed = 250
     self.sprintSpeed = 400
     self.speed = self.defaultSpeed
@@ -105,6 +105,8 @@ function Player:update(dt)
     local oldY = self.yPos
 
     self:Move(xMovement,yMovement)
+    
+    self:ChangeZIndex(self.yPos)
 
     if math.abs(oldX - self.xPos) < 0.01 and math.abs(oldY - self.yPos) < 0.01 then
         self.animationId = self.direction .. self.slimeState  .. "Idle"
