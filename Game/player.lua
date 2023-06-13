@@ -1,10 +1,12 @@
-Player = Prop:extend()
+Player = GameObject:extend()
 
 function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, colliderXSize , colliderYSize, visible, zIndex)
-    Player.super:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, colliderXSize , colliderYSize, visible, zIndex)
+    Player.super.new(self, name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, rotation, hasCollision, blocks, colliderXSize , colliderYSize, visible, zIndex)
     self.defaultSpeed = 250
     self.sprintSpeed = 400
     self.speed = self.defaultSpeed
+
+    self.isUI = false;
 
     self.animationId = "downRegularIdle"
     self.slimeState = "Regular"
@@ -49,6 +51,7 @@ function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, 
     self.animations["leftIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,11,   64,64,   4,8)
     self.animations["upIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,11,   64,64,   4,8)
 
+    self:Move(1,1)
 end
 
 function Player:collisionEnter(other)
@@ -65,7 +68,7 @@ end
 
 function Player:update(dt)
     if love.keyboard.isDown("return") then
-        self:SetPosition(0,0)
+        self:destroy()
     end
 
     if love.keyboard.isDown("1") then
@@ -86,7 +89,7 @@ function Player:update(dt)
     else
         self.speed = self.defaultSpeed
     end
-
+    
     if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
         xMovement = xMovement + self.speed * dt
         self.direction = "right"

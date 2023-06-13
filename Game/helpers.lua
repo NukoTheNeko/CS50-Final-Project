@@ -3,6 +3,8 @@ WindowHeight = love.graphics.getHeight()
 
 DeltaTime = 0
 
+
+
 function CheckCollision(prop1, prop2)
     local prop1Left = prop1.xPos - (prop1.colliderXSize * prop1.xScale / 2)
     local prop1Right = prop1.xPos + (prop1.colliderXSize * prop1.xScale / 2)
@@ -23,6 +25,8 @@ function CheckCollision(prop1, prop2)
         and prop1Top < prop2Bottom
 end
 
+
+
 function TableContains(tableToSearch, toFind)
     for i, element in pairs(tableToSearch) do
         if element == toFind then 
@@ -32,10 +36,29 @@ function TableContains(tableToSearch, toFind)
     return 0
 end
 
+
+
 function Sort(a,b)
     return a.zIndex > b.zIndex
 end
 
 function TableZSort(tableToSort)
     table.sort(tableToSort, Sort)
+end
+
+
+
+function CleanCollisions(ObjectToClean, remains)
+    for y, Object in ipairs(Objects) do
+        if Object == ObjectToClean then
+            goto skip
+        end
+        local temp = TableContains(Object.collisionMatrix, ObjectToClean)  
+        table.remove(Object.collisionMatrix, temp)
+        Object:collisionExit(ObjectToClean)
+        if remains then
+            ObjectToClean:collisionExit(Object)
+        end
+        ::skip::
+    end
 end
