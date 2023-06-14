@@ -50,7 +50,7 @@ end
 
 function CleanCollisions(ObjectToClean, remains)
     for y, Object in ipairs(Objects) do
-        if Object == ObjectToClean then
+        if Object == ObjectToClean or Object.isUI then
             goto skip
         end
         local temp = TableContains(Object.collisionMatrix, ObjectToClean)  

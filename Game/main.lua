@@ -88,6 +88,7 @@ function love.update(dt)
         local temp = TableContains(Objects, ObjectToDestroy)
         table.remove(Objects, temp)
     end
+    collectgarbage()
 end
 
 

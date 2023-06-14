@@ -32,13 +32,11 @@ end
 
 
 function GameObject:collisionEnter(other)
-    self:SetColor(2, 255, 2, 255)
 end
 
 
 
 function GameObject:collisionExit(other)
-    self:SetColor(255, 255, 255, 255)
 end
 
 
