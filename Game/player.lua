@@ -109,7 +109,7 @@ function Player:update(dt)
 
     self:Move(xMovement,yMovement)
     
-    self:ChangeZIndex(self.yPos)
+    self:ChangeZIndex(self.yPos + self.yPivot)
 
     if math.abs(oldX - self.xPos) < 0.01 and math.abs(oldY - self.yPos) < 0.01 then
         self.animationId = self.direction .. self.slimeState  .. "Idle"

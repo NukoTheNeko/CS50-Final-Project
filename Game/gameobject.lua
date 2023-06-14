@@ -19,9 +19,12 @@ function GameObject:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yP
 
     self.colliderXSize = colliderXSize
     self.colliderYSize = colliderYSize
+    self.colliderXDisplace = 0
+    self.colliderYDisplace = 0
 
     self.xPivot = tilemap.tileWidth/2
     self.yPivot = tilemap.tileHeight/2
+
 end
 
 

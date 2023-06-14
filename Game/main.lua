@@ -19,26 +19,32 @@ local Grid = {
                 {1,1,1,1,1,1,1,1}
              }
 
-function love.load()
+function love.load() 
+    love.profiler = require('profile') 
+    love.profiler.start()
+
+
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setBackgroundColor(0, 0.66, 0)
     Objects = {}
     ObjectsToDestroy = {}
     
-    Tiles = TileMap("Assets/TileMap.png",64,64,4,8,2)
+    Tiles = TileMap("Assets/TileMap.png",64,64,4,8,3)
     PlayerTiles = TileMap("Assets/MainCharacterAnim.png",64,64,4,8,1)
-    Player = Player("Player", "character", PlayerTiles, 1, 1, 1, 0, 0, 0, true, true, 40, 64, true, 1)
+    Player = Player("Player", "character", PlayerTiles, 1, 2, 2, 0, 0, 0, true, true, 50, 20, true, 1)
+    Player.colliderXDisplace = 14 
+    Player.colliderYDisplace = 88
     table.insert(Objects,Player)
     size = 64
     width = 6
     height = 6
-    for i = -size * width, size * width, size do
-        for j = -size * height, size * height, size do
-            if math.abs(i) == size * width or math.abs(j) == size * height then
-                table.insert(Objects,GameObject("Box", "box", Tiles, 4, 1, 1, i, j, 0, false, true, 64, 64, true, j))    
-            end
-        end
-    end 
+    --for i = -size * width, size * width, size do
+    --    for j = -size * height, size * height, size do
+    --        if math.abs(i) == size * width or math.abs(j) == size * height then
+    --            table.insert(Objects,GameObject("Box", "box", Tiles, 4, 1, 1, i, j, 0, false, true, 64, 64, true, j))    
+    --        end
+    --    end
+    --end 
     table.insert(Objects, GameObject("SpikeTrap", "spikes",  Tiles, 5, 1, 1, 128, 128, 0, true, false, 64, 64, true, 128))   
     table.insert(Objects, GameObject("SpikeTrap", "spikes",  Tiles, 5, 1, 1, -128, -128, 0, true, false, 64, 64, true, -128))  
     table.insert(Objects, GameObject("Rock", "rocks",  Tiles, 6, 1, 1, -128, 128, 0, false, true, 64, 64, true, 128))   
@@ -48,9 +54,16 @@ function love.load()
     table.insert(Objects, Text)
 end
 
-
+love.frame = 0
 
 function love.update(dt)
+    love.frame = love.frame + 1
+    if love.frame%100 == 0 then
+      love.report = love.profiler.report(20)
+      love.profiler.reset()
+    end
+
+
     DeltaTime = dt
     for i=#Objects,1,-1 do
         if not Objects[i].hasCollision or Objects[i].isUI then
@@ -101,10 +114,13 @@ function love.draw()
     for i=#Objects,1,-1 do
         if not Objects[i].isUI then
             Objects[i]:draw()
-            CheckCollision(Objects[i], Objects[i])
+            --CheckCollision(Objects[i], Objects[i])
         end
     end
     love.graphics.pop()
+
+    love.graphics.print(love.report or "Please wait...")
+
     for i = #Objects, 1, -1 do
         if Objects[i].isUI then
             Objects[i]:draw()
