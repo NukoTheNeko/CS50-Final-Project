@@ -1,5 +1,5 @@
 Prop = Object:extend()
-require("animation")
+require("Game.Engine.animation")
 
 function Prop:new(name, tag, xScale, yScale, xPos, yPos, rotation, visible, zIndex)
 

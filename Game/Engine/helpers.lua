@@ -21,8 +21,8 @@ function CheckCollision(prop1, prop2)
     local prop2Top = prop2YPivot
     local prop2Bottom = prop2YPivot + (prop2.colliderYSize * prop2.yScale)
 
-    --love.graphics.setColor(1, 0, 0, 0.4)
-    --love.graphics.rectangle("fill",prop1Left,prop1Top,prop1Right-prop1Left,prop1Bottom-prop1Top)
+    love.graphics.setColor(1, 0, 0, 0.4)
+    love.graphics.rectangle("fill",prop1Left,prop1Top,prop1Right-prop1Left,prop1Bottom-prop1Top)
 
     return  prop1Right > prop2Left
         and prop1Left < prop2Right

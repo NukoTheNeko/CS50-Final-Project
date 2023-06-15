@@ -1,26 +1,38 @@
 io.stdout:setvbuf("no")
 
-Object = require "classic"
-require "prop"
-require "textui"
-require "gameobject"
-require "player"
-require "helpers"
-require "tilemap"
+Object = require "Game.Engine.classic"
+require "Game.Engine.helpers"
+require "Game.Engine.tilemap"
+require "Game.Engine.prop"
+require "Game.Engine.textui"
+require "Game.Engine.gameobject"
+require "Game.Scripts.player"
+require "Game.Scripts.spikes"
+require "Game.Scripts.rock"
 
 local Grid = {
-                {3,3,3,3,3,3,3,3},
-                {3,3,3,3,3,3,3,3},
-                {3,3,3,3,3,3,3,3},
-                {2,2,2,2,2,2,2,2},
-                {1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1}
+                {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
+                {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
+                {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
+                {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
+                {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
+                {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
+                {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+                {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
              }
 
 function love.load() 
-    love.profiler = require('profile') 
+    love.profiler = require('Game.Engine.profile') 
     love.profiler.start()
 
 
@@ -29,11 +41,9 @@ function love.load()
     Objects = {}
     ObjectsToDestroy = {}
     
-    Tiles = TileMap("Assets/TileMap.png",64,64,4,8,3)
+    Tiles = TileMap("Assets/TileMap.png",64,64,4,8,1)
     PlayerTiles = TileMap("Assets/MainCharacterAnim.png",64,64,4,8,1)
-    Player = Player("Player", "character", PlayerTiles, 1, 2, 2, 0, 0, 0, true, true, 50, 20, true, 1)
-    Player.colliderXDisplace = 14 
-    Player.colliderYDisplace = 88
+    Player = Player("Player", "character", PlayerTiles, 1, 1, 1, 0, 0, 0, true, true, 24, 10, true, 1)
     table.insert(Objects,Player)
     size = 64
     width = 6
@@ -45,10 +55,10 @@ function love.load()
     --        end
     --    end
     --end 
-    table.insert(Objects, GameObject("SpikeTrap", "spikes",  Tiles, 5, 1, 1, 128, 128, 0, true, false, 64, 64, true, 128))   
-    table.insert(Objects, GameObject("SpikeTrap", "spikes",  Tiles, 5, 1, 1, -128, -128, 0, true, false, 64, 64, true, -128))  
-    table.insert(Objects, GameObject("Rock", "rocks",  Tiles, 6, 1, 1, -128, 128, 0, false, true, 64, 64, true, 128))   
-    table.insert(Objects, GameObject("Rock", "rocks",  Tiles, 6, 1, 1, 128, -128, 0, false, true, 64, 64, true, -128))
+    table.insert(Objects, Spike("SpikeTrap", "spikes",  Tiles, 5, 1, 1, 128, 128, 0, true, false, Tiles.tileWidth, 28, true, 128))   
+    table.insert(Objects, Spike("SpikeTrap", "spikes",  Tiles, 5, 1, 1, -128, -128, 0, true, false, Tiles.tileWidth, 28, true, -128))
+    table.insert(Objects, Rock("Rock", "rocks",  Tiles, 7, 1, 1, -128, 128, 0, false, true, 54, 20, true, 128))   
+    table.insert(Objects, Rock("Rock", "rocks",  Tiles, 7, 1, 1, 128, -128, 0, false, true, 54, 20, true, -128))
     Text = TextUI("Title", "text",  "The Game",100, 5, 5, WindowWidth/2, 100, 0, true, 0)
     Text:SetColor(100,255,200,255)
     table.insert(Objects, Text)
@@ -77,6 +87,7 @@ function love.update(dt)
             if CheckCollision(Objects[i],Objects[j]) then
                 if temp == 0 then
                     table.insert(Objects[i].collisionMatrix, Objects[j])
+                    table.insert(Objects[j].collisionMatrix, Objects[i])
                     Objects[i]:collisionEnter(Objects[j])
                     Objects[j]:collisionEnter(Objects[i])
                 end
@@ -84,6 +95,10 @@ function love.update(dt)
                 Objects[j]:isColliding(Objects[i])
             elseif temp ~= 0 then
                 table.remove(Objects[i].collisionMatrix, temp)
+                local temp2 = TableContains(Objects[j].collisionMatrix, Objects[i])
+                if temp2 ~= 0 then
+                    table.remove(Objects[j].collisionMatrix, temp2)
+                end
                 Objects[i]:collisionExit(Objects[j])
                 Objects[j]:collisionExit(Objects[i])
             end
@@ -110,7 +125,7 @@ function love.draw()
     love.graphics.scale(1)
     love.graphics.push()
     love.graphics.translate(-Player.xPos + WindowWidth/2, -Player.yPos +  WindowHeight/2)
-    Tiles:draw(Grid,-600,-800)
+    Tiles:draw(Grid,-12*64,-12*64)
     for i=#Objects,1,-1 do
         if not Objects[i].isUI then
             Objects[i]:draw()

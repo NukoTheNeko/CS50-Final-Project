@@ -1,5 +1,5 @@
 Animation = Object:extend()
-require "helpers"
+require("Game.Engine.helpers")
 
 function Animation:new(spriteSheet, totalFrames, hFrameCount, vFrameCount, firstHFrame, firstVFrame,frameWidth, frameHeight, outerBorder, innerBorder)
     self.spriteSheet = love.graphics.newImage(spriteSheet)

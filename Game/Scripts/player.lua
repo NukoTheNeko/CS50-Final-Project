@@ -6,6 +6,12 @@ function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, 
     self.sprintSpeed = 400
     self.speed = self.defaultSpeed
 
+    self.colliderXDisplace = (tilemap.tileWidth * xScale - colliderXSize)/2
+    self.colliderYDisplace = tilemap.tileHeight * yScale - colliderYSize
+
+    self.maxHealth = 100
+    self.health = 100
+
     self.isUI = false;
 
     self.animationId = "downRegularIdle"
@@ -109,11 +115,23 @@ function Player:update(dt)
 
     self:Move(xMovement,yMovement)
     
-    self:ChangeZIndex(self.yPos + self.yPivot)
+    self:ChangeZIndex(self.yPos + self.yPivot - self.colliderYDisplace/2)
 
     if math.abs(oldX - self.xPos) < 0.01 and math.abs(oldY - self.yPos) < 0.01 then
         self.animationId = self.direction .. self.slimeState  .. "Idle"
     else
         self.animationId = self.direction .. self.slimeState
+    end
+end
+
+function Player:ChangeHealth(value)
+    self.health = self.health + value
+
+    if self.health > self.maxHealth then
+        self.health = self.maxHealth
+    end
+    if self.health <= 0 then
+        self.health = 0
+        self:destroy()
     end
 end
