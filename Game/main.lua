@@ -64,15 +64,22 @@ function love.load()
     table.insert(Objects, Text)
 end
 
+
+--Debug
 love.frame = 0
+--/Debug
+
 
 function love.update(dt)
+
+
+--Debug
     love.frame = love.frame + 1
     if love.frame%100 == 0 then
       love.report = love.profiler.report(20)
       love.profiler.reset()
     end
-
+--/Debug
 
     DeltaTime = dt
     for i=#Objects,1,-1 do
@@ -129,12 +136,22 @@ function love.draw()
     for i=#Objects,1,-1 do
         if not Objects[i].isUI then
             Objects[i]:draw()
+
+
+--Debug
             --CheckCollision(Objects[i], Objects[i])
+--/Debug
+
+
         end
     end
     love.graphics.pop()
 
+
+--Debug
     love.graphics.print(love.report or "Please wait...")
+--/Debug
+
 
     for i = #Objects, 1, -1 do
         if Objects[i].isUI then
