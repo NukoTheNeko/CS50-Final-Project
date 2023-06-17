@@ -14,7 +14,6 @@ function TextUI:draw()
     end
     TextUI.super.draw(self)
     self.message = Player.health
-    love.graphics.printf(self.message,self.xPos,self.yPos,self.textBoxWidth,"center",self.rotation,self.xScale,self.yScale,self.xPivot,self.yPivot)
 end
 
 function TextUI:update(dt)

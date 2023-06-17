@@ -71,6 +71,15 @@ end
 
 
 
+function GameObject:ChangeAnimation(id)
+    if self.animationId ~= nil and self.animationId ~= id then
+        self.animations[self.animationId].currentFrame = 1
+    end
+    self.animationId = id
+end
+
+
+
 function GameObject:draw()
     if not self.visible then
         return

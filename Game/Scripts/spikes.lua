@@ -7,7 +7,7 @@ function Spike:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, r
     self.colliderXDisplace = (tilemap.tileWidth * xScale - colliderXSize)/2
     self.colliderYDisplace = tilemap.tileHeight * yScale - colliderYSize
     
-    self.animationId = "down"
+    self:ChangeAnimation("down")
     self.animations["down"] = Animation("Assets/TileMap.png",   1,   1,1,   3,2,   64,64,   4,8)
     self.animations["up"] = Animation("Assets/TileMap.png",   1,   1,1,   2,2,   64,64,   4,8)
 end
@@ -15,12 +15,12 @@ end
 function Spike:collisionEnter(other)
     if other.tag == "character" then
         other:ChangeHealth(-self.damage)
-        self.animationId = "up"
+        self:ChangeAnimation("up")
     end
 end
 
 function Spike:collisionExit(other)
     if other.tag == "character" and other.health ~= 0 then
-        self.animationId = "down"
+        self:ChangeAnimation("down")
     end
 end

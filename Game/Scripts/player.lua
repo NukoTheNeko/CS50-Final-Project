@@ -13,15 +13,19 @@ function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, 
     self.health = 100
 
     self.timer = 0
+    self.timerLimit = 0
 
     self.canMove = true
     self.invincible = false
+
+    self.slimeSlash = false
+    self.slimeSlashDuration = 0.2
 
     self.shockCharge = false
     self.chargeDuration = 0.2
     self.chargeSpeed = 1500
 
-    self.animationId = "downRegularIdle"
+    self:ChangeAnimation("downRegularIdle")
     self.slimeState = "Regular"
     self.direction = "down"
 
@@ -35,39 +39,45 @@ function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, 
     self.animations["upRegular"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,2,   64,64,   4,8)
     
 
-    self.animations["downShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   1,4,   64,64,   4,8)
-    self.animations["rightShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   2,4,   64,64,   4,8)
-    self.animations["leftShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   3,4,   64,64,   4,8)
-    self.animations["upShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   4,4,   64,64,   4,8)
-    self.animations["downShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,5,   64,64,   4,8)
-    self.animations["rightShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,5,   64,64,   4,8)
-    self.animations["leftShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,5,   64,64,   4,8)
-    self.animations["upShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,5,   64,64,   4,8)
-
-    self.animations["downShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,7,   64,64,   4,8)
-    self.animations["rightShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,7,   64,64,   4,8)
-    self.animations["leftShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,7,   64,64,   4,8)
-    self.animations["upShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,7,   64,64,   4,8)
+    self.animations["downRegularAbility"] = Animation("Assets/MainCharacterAnim.png",   4,   1,4,   1,4,   64,64,   4,8)
+    self.animations["rightRegularAbility"] = Animation("Assets/MainCharacterAnim.png",   4,   1,4,   2,4,   64,64,   4,8)
+    self.animations["leftRegularAbility"] = Animation("Assets/MainCharacterAnim.png",   4,   1,4,   3,4,   64,64,   4,8)
+    self.animations["upRegularAbility"] = Animation("Assets/MainCharacterAnim.png",   4,   1,4,   4,4,   64,64,   4,8)
     
 
-    self.animations["downFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   1,9,   64,64,   4,8)
-    self.animations["rightFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   2,9,   64,64,   4,8)
-    self.animations["leftFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   3,9,   64,64,   4,8)
-    self.animations["upFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   4,9,   64,64,   4,8)
-    self.animations["downFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,10,   64,64,   4,8)
-    self.animations["rightFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,10,   64,64,   4,8)
-    self.animations["leftFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,10,   64,64,   4,8)
-    self.animations["upFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,10,   64,64,   4,8)
+    self.animations["downShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   1,8,   64,64,   4,8)
+    self.animations["rightShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   2,8,   64,64,   4,8)
+    self.animations["leftShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   3,8,   64,64,   4,8)
+    self.animations["upShockIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   4,8,   64,64,   4,8)
+    self.animations["downShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,9,   64,64,   4,8)
+    self.animations["rightShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,9,   64,64,   4,8)
+    self.animations["leftShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,9,   64,64,   4,8)
+    self.animations["upShock"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,9,   64,64,   4,8)
+
+    self.animations["downShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,11,   64,64,   4,8)
+    self.animations["rightShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,11,   64,64,   4,8)
+    self.animations["leftShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,11,   64,64,   4,8)
+    self.animations["upShockAbility"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,11,   64,64,   4,8)
     
 
-    self.animations["downIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   1,12,   64,64,   4,8)
-    self.animations["rightIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   2,12,   64,64,   4,8)
-    self.animations["leftIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   3,12,   64,64,   4,8)
-    self.animations["upIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   4,12,   64,64,   4,8)
-    self.animations["downIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,13,   64,64,   4,8)
-    self.animations["rightIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,13,   64,64,   4,8)
-    self.animations["leftIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,13,   64,64,   4,8)
-    self.animations["upIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,13,   64,64,   4,8)
+    self.animations["downFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   1,13,   64,64,   4,8)
+    self.animations["rightFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   2,13,   64,64,   4,8)
+    self.animations["leftFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   3,13,   64,64,   4,8)
+    self.animations["upFireIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   4,13,   64,64,   4,8)
+    self.animations["downFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,14,   64,64,   4,8)
+    self.animations["rightFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,14,   64,64,   4,8)
+    self.animations["leftFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,14,   64,64,   4,8)
+    self.animations["upFire"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,14,   64,64,   4,8)
+    
+
+    self.animations["downIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   1,16,   64,64,   4,8)
+    self.animations["rightIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   2,16,   64,64,   4,8)
+    self.animations["leftIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   3,16,   64,64,   4,8)
+    self.animations["upIceIdle"] = Animation("Assets/MainCharacterAnim.png",   1,   1,1,   4,16,   64,64,   4,8)
+    self.animations["downIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   1,17,   64,64,   4,8)
+    self.animations["rightIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   2,17,   64,64,   4,8)
+    self.animations["leftIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   3,17,   64,64,   4,8)
+    self.animations["upIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,17,   64,64,   4,8)
 
     self:Move(1,1)
 end
@@ -89,8 +99,12 @@ love.keypressed = function (k)
         Player.canMove = false
         Player.timer = 0
         if Player.slimeState == "Regular" then
+            Player.timerLimit = Player.slimeSlashDuration 
+            Player.slimeSlash = true
+            Player.animationSpeed = 20
         end
         if Player.slimeState == "Shock" then
+            Player.timerLimit = Player.chargeDuration
             Player.invincible = true
             Player.shockCharge = true
             Player.animationSpeed = 15
@@ -105,12 +119,18 @@ end
 function Player:update(dt)
     self.timer = self.timer + dt
     
-    if self.shockCharge and self.timer > self.chargeDuration then
-        self.shockCharge = false
-        self.invincible = false
+    if self.timer > self.timerLimit and not self.canMove then
         self.canMove = true
         self.animationSpeed = 5
+        if self.slimeSlash then
+            self.slimeSlash = false
+        elseif self.shockCharge then
+            self.shockCharge = false
+            self.invincible = false
+        end
     end
+
+
 
     if love.keyboard.isDown("return") then
         self:destroy()
@@ -159,9 +179,12 @@ function Player:update(dt)
     local oldX = self.xPos
     local oldY = self.yPos
 
+    if self.slimeSlash then
+        self.ChangeAnimation(self, self.direction .. "RegularAbility")
+    end
 
     if self.shockCharge then
-        self.animationId = self.direction .. "ShockAbility"
+        self.ChangeAnimation(self, self.direction .. "ShockAbility")
         local changeX = 0
         local changeY = 0
         if self.direction == "right" then
@@ -186,9 +209,9 @@ function Player:update(dt)
 
     if not self.canMove then
     elseif math.abs(oldX - self.xPos) < 0.01 and math.abs(oldY - self.yPos) < 0.01 then
-        self.animationId = self.direction .. self.slimeState  .. "Idle"
+        self.ChangeAnimation(self, self.direction .. self.slimeState  .. "Idle")
     else
-        self.animationId = self.direction .. self.slimeState
+        self.ChangeAnimation(self, self.direction .. self.slimeState)
     end
 end
 
