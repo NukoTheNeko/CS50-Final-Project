@@ -44,6 +44,13 @@ end
 
 
 
+function GameObject:MoveTowards(xCoord, yCoord, speed)
+    local normX, normY = NormalizeVector(xCoord - self.xPos, yCoord - self.yPos)
+    self:Move(normX * speed * DeltaTime, normY * speed * DeltaTime)
+end
+
+
+
 function GameObject:Move(xAmount, yAmount)
     self.xPos = self.xPos + xAmount
     self.yPos = self.yPos + yAmount

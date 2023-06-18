@@ -25,5 +25,7 @@ function Animation:Play(speed)
     self.currentFrame = self.currentFrame + speed * DeltaTime
     if math.floor(self.currentFrame) > self.totalFrames then
         self.currentFrame = 1
+    elseif math.floor(self.currentFrame) < 1 then
+        self.currentFrame = self.totalFrames
     end
 end

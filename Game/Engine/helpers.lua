@@ -71,3 +71,17 @@ function CleanCollisions(ObjectToClean, remains)
         ::skip::
     end
 end
+
+
+
+function NormalizeVector(x,y)
+    local size = math.sqrt((x * x) + (y * y))
+    local normX = 0
+    local normY = 0
+    if size ~= 0 then
+        normX = x / size
+        normY = y / size
+    end
+
+    return normX, normY
+end

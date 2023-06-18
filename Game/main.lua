@@ -7,6 +7,8 @@ require "Game.Engine.prop"
 require "Game.Engine.textui"
 require "Game.Engine.gameobject"
 require "Game.Scripts.player"
+require "Game.Scripts.slowable"
+require "Game.Scripts.goo"
 require "Game.Scripts.spikes"
 require "Game.Scripts.rock"
 
@@ -54,11 +56,11 @@ function love.load()
     --            table.insert(Objects,GameObject("Box", "box", Tiles, 4, 1, 1, i, j, 0, false, true, 64, 64, true, j))    
     --        end
     --    end
-    --end 
+    --end
     table.insert(Objects, Spike("SpikeTrap", "spikes",  Tiles, 5, 1, 1, 128, 128, 0, true, false, Tiles.tileWidth, 28, true, 128))   
     table.insert(Objects, Spike("SpikeTrap", "spikes",  Tiles, 5, 1, 1, -128, -128, 0, true, false, Tiles.tileWidth, 28, true, -128))
-    table.insert(Objects, Rock("Rock", "rocks",  Tiles, 7, 1, 1, -128, 128, 0, false, true, 54, 20, true, 128))   
-    table.insert(Objects, Rock("Rock", "rocks",  Tiles, 7, 1, 1, 128, -128, 0, false, true, 54, 20, true, -128))
+    table.insert(Objects, Rock("Rock", "rocks",  Tiles, 8, 1, 1, 128, -128, 0, true, false, 54, 20, true, 128))   
+    table.insert(Objects, Rock("Rock", "rocks",  Tiles, 8, 1, 1, 128, -128, 0, true, false, 54, 20, true, -128))
     Text = TextUI("Title", "text",  "The Game",100, 5, 5, WindowWidth/2, 100, 0, true, 0)
     Text:SetColor(100,255,200,255)
     table.insert(Objects, Text)

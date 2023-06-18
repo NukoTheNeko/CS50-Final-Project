@@ -20,6 +20,7 @@ function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, 
 
     self.slimeSlash = false
     self.slimeSlashDuration = 0.2
+    self.gooDistance = 50
 
     self.shockCharge = false
     self.chargeDuration = 0.2
@@ -80,16 +81,18 @@ function Player:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, 
     self.animations["upIce"] = Animation("Assets/MainCharacterAnim.png",   2,   1,2,   4,17,   64,64,   4,8)
 
     self:Move(1,1)
+
+    self.goo = nil
 end
 
 function Player:collisionEnter(other)
-    if other.tag == "spikes" then
+    if other.tag =="rocks" then
         self:SetColor(255, 2, 2, 255)
     end
 end
 
 function Player:collisionExit(other)
-    if other.tag == "spikes" then
+    if other.tag =="rocks" then
         self:SetColor(255, 255, 255, 255)
     end
 end
@@ -102,6 +105,22 @@ love.keypressed = function (k)
             Player.timerLimit = Player.slimeSlashDuration 
             Player.slimeSlash = true
             Player.animationSpeed = 20
+            if Player.goo == nil then
+                local xChange = 0
+                local yChange = 0
+                if Player.direction == "down" then  
+                    yChange = Player.gooDistance
+                elseif Player.direction == "left" then  
+                    xChange = -Player.gooDistance
+                elseif Player.direction == "right" then  
+                    xChange = Player.gooDistance
+                elseif Player.direction == "up" then  
+                    yChange = -Player.gooDistance
+                end
+
+                Player.goo = Goo("Goo", "goo", Tiles, 9, 1, 1, Player.xPos + xChange, Player.yPos + yChange, 0, true, false, 64, 64, true, 1)
+                table.insert(Objects, Player.goo)
+            end
         end
         if Player.slimeState == "Shock" then
             Player.timerLimit = Player.chargeDuration
@@ -124,6 +143,10 @@ function Player:update(dt)
         self.animationSpeed = 5
         if self.slimeSlash then
             self.slimeSlash = false
+            if Player.goo.contact == nil then
+                Player.goo:destroy()
+            end
+            Player.goo = nil
         elseif self.shockCharge then
             self.shockCharge = false
             self.invincible = false
