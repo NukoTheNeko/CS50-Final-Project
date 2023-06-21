@@ -13,6 +13,7 @@ function Rock:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, ro
     self.defaultSpeed = 600
     self.currentSpeed = self.defaultSpeed
 
+    self.loops = true
     self.targetPoints = {}
     self.currentTarget = 1
     self.targetChange = -1
@@ -21,6 +22,8 @@ function Rock:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, ro
     table.insert(self.targetPoints, {x = xPos + 300, y = yPos + 300})
     table.insert(self.targetPoints, {x = xPos + 300, y =  yPos - 300})
     table.insert(self.targetPoints, {x = xPos, y = yPos - 300})
+
+    self.combustible = true
 end
 
 function Rock:update(dt)
@@ -44,9 +47,17 @@ function Rock:update(dt)
         self.currentTarget = self.currentTarget + self.targetChange
     end
     if self.currentTarget > #self.targetPoints then
-        self.currentTarget = 1
+        if self.loops then
+            self.currentTarget = 1
+        else
+            self:Reverse()
+        end
     elseif self.currentTarget < 1 then
-        self.currentTarget = #self.targetPoints
+        if self.loops then
+            self.currentTarget = #self.targetPoints
+        else
+            self:Reverse()
+        end
     end
 
     if target.x > self.xPos or target.y > self.yPos then
@@ -58,4 +69,14 @@ function Rock:update(dt)
     self:MoveTowards(target.x, target.y, self.currentSpeed)
 
     self:ChangeZIndex(self.yPos + self.yPivot - self.colliderYDisplace/2)
+end
+
+function Rock:Reverse()
+    self.targetChange = self.targetChange * -1
+    self.currentTarget = self.currentTarget + self.targetChange
+    if self.currentTarget > #self.targetPoints then
+        self.currentTarget = 1
+    elseif self.currentTarget < 1 then
+        self.currentTarget = #self.targetPoints
+    end
 end
