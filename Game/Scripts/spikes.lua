@@ -8,8 +8,8 @@ function Spike:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, r
     self.colliderYDisplace = tilemap.tileHeight * yScale - colliderYSize
     
     self:ChangeAnimation("down")
-    self.animations["down"] = Animation("Assets/TileMap.png",   1,   1,1,   3,2,   64,64,   4,8)
-    self.animations["up"] = Animation("Assets/TileMap.png",   1,   1,1,   2,2,   64,64,   4,8)
+    self.animations["down"] = Animation(Tiles,   1,   1,1,   3,2)
+    self.animations["up"] = Animation(Tiles,   1,   1,1,   2,2)
 end
 
 function Spike:collisionEnter(other)

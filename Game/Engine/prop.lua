@@ -1,5 +1,4 @@
 Prop = Object:extend()
-require("Game.Engine.animation")
 
 function Prop:new(name, tag, xScale, yScale, xPos, yPos, rotation, visible, zIndex)
 
@@ -31,7 +30,7 @@ function Prop:new(name, tag, xScale, yScale, xPos, yPos, rotation, visible, zInd
     
     self.isUI = true;
     
-    self:ChangeZIndex(zIndex)
+    self.zIndex = zIndex
 end
 
 
@@ -92,13 +91,6 @@ end
 
 function Prop:SetTag(tag)
     self.tag = tag
-end
-
-
-
-function Prop:ChangeZIndex(zIndex)
-    self.zIndex = zIndex
-    TableZSort(Objects)
 end
 
 

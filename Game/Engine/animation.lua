@@ -1,31 +1,31 @@
 Animation = Object:extend()
 require("Game.Engine.helpers")
 
-function Animation:new(spriteSheet, totalFrames, hFrameCount, vFrameCount, firstHFrame, firstVFrame,frameWidth, frameHeight, outerBorder, innerBorder)
-    self.spriteSheet = love.graphics.newImage(spriteSheet)
-    self.frames = {}
+function Animation:new(tileMap, totalFrames, hFrameCount, vFrameCount, firstHFrame, firstVFrame)
+    self.tileMap = tileMap
 
+    self.hFrameCount = hFrameCount
+    self.vFrameCount = vFrameCount
+
+    self.startingFrame = firstHFrame + ((firstVFrame - 1) * tileMap.tileHCount)
+
+    self.currentFrame = 0
     self.totalFrames = totalFrames
-    self.currentFrame = 1
 
-    self.imageHeight = self.spriteSheet:getHeight()
-    self.imageWidth = self.spriteSheet:getWidth()
-
-    self.xPivot = frameWidth/2
-    self.yPivot = frameHeight/2
-
-    for i = 0, vFrameCount - 1 do
-        for j = 0, hFrameCount - 1 do
-            table.insert(self.frames, love.graphics.newQuad(outerBorder + (firstHFrame - 1 + j) * (frameWidth + innerBorder), outerBorder + (firstVFrame - 1 + i) * (frameHeight + innerBorder), frameWidth, frameHeight, self.imageWidth, self.imageHeight))
-        end 
-    end
 end
 
 function Animation:Play(speed)
     self.currentFrame = self.currentFrame + speed * DeltaTime
-    if math.floor(self.currentFrame) > self.totalFrames then
-        self.currentFrame = 1
-    elseif math.floor(self.currentFrame) < 1 then
-        self.currentFrame = self.totalFrames
+    if math.floor(self.currentFrame) > self.totalFrames - 1 then
+        self.currentFrame = 0
+    elseif math.floor(self.currentFrame) < 0 then
+        self.currentFrame = self.totalFrames - 1
     end
+end
+--self.animations["defualt"] = Animation(Animations,   6,   4,1,   1,3)
+
+function Animation:GetAnimQuad()
+    local h = math.floor(self.currentFrame % self.hFrameCount)
+    local v = self.tileMap.tileHCount * math.floor(self.currentFrame / self.hFrameCount)
+    return self.tileMap:GetQuad(self.startingFrame + v + h)
 end

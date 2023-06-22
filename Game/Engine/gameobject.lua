@@ -97,10 +97,10 @@ function GameObject:draw()
     else
         local animation = self.animations[self.animationId]
         animation:Play(self.animationSpeed) 
-        love.graphics.draw(animation.spriteSheet,
-            animation.frames[math.floor(animation.currentFrame)],
+        love.graphics.draw(animation.tileMap.tileSheet,
+            animation:GetAnimQuad(),
             self.xPos, self.yPos, self.rotation,
             self.xScale, self.yScale,
-            animation.xPivot, animation.yPivot)
+            self.xPivot, self.yPivot)
     end
 end

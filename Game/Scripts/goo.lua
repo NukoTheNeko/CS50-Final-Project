@@ -20,7 +20,7 @@ end
 
 function Goo:update(dt)
     if self.contact ~= nil then
-        self:ChangeZIndex(self.contact.zIndex+1)
+        self.zIndex = self.contact.zIndex + 1
         self.timer = self.timer + dt
         self.xPos = self.contact.xPos
         self.yPos = self.contact.yPos
@@ -30,6 +30,6 @@ function Goo:update(dt)
             self:destroy()
         end
     else
-        self:ChangeZIndex(self.yPos)
+        self.zIndex = self.yPos
     end
 end

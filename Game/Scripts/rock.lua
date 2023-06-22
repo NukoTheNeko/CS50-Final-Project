@@ -6,7 +6,7 @@ function Rock:new(name, tag, tilemap, targetTile, xScale, yScale, xPos, yPos, ro
     self.colliderXDisplace = (tilemap.tileWidth * xScale - colliderXSize)/2
     self.colliderYDisplace = tilemap.tileHeight * yScale - colliderYSize
     
-    self.animations["default"] = Animation("Assets/RollingStone.png",   4,   2,2,   1,1,   64,64,   4,8)
+    self.animations["default"] = Animation(Animations,   4,   4,1,   1,3)
     self.animationId = "default"
     self.defaultAnimationSpeed = 15
     
@@ -68,7 +68,7 @@ function Rock:update(dt)
 
     self:MoveTowards(target.x, target.y, self.currentSpeed)
 
-    self:ChangeZIndex(self.yPos + self.yPivot - self.colliderYDisplace/2)
+    self.zIndex = self.yPos + self.yPivot - self.colliderYDisplace / 2
 end
 
 function Rock:Reverse()

@@ -6,6 +6,7 @@ require "Game.Engine.tilemap"
 require "Game.Engine.prop"
 require "Game.Engine.textui"
 require "Game.Engine.gameobject"
+require "Game.Engine.animation"
 
 
 require "Game.Scripts.player"
@@ -47,8 +48,12 @@ function love.load()
     Objects = {}
     ObjectsToDestroy = {}
     
+    
     Tiles = TileMap("Assets/TileMap.png",64,64,4,8,1)
     PlayerTiles = TileMap("Assets/MainCharacterAnim.png",64,64,4,8,1)
+    Animations = TileMap("Assets/Animations.png",64,64,4,8,1)
+
+
     Player = Player("Player", "character", PlayerTiles, 1, 1, 1, 0, 0, 0, true, true, 24, 10, true, 1)
     table.insert(Objects,Player)
     size = 64
@@ -132,6 +137,7 @@ function love.update(dt)
         table.remove(ObjectsToDestroy, temp)
     end
     collectgarbage()
+    TableZSort(Objects)
 end
 
 
@@ -139,8 +145,8 @@ end
 function love.draw()
     love.graphics.scale(1)
     love.graphics.push()
-    love.graphics.translate(-Player.xPos + WindowWidth/2, -Player.yPos +  WindowHeight/2)
-    Tiles:draw(Grid,-12*64,-12*64)
+    love.graphics.translate(-Player.xPos + WindowWidth / 2, -Player.yPos +  WindowHeight / 2)
+    Tiles:draw(Grid, -12 * 64, -12 * 64)
     for i=#Objects,1,-1 do
         if not Objects[i].isUI then
             Objects[i]:draw()
@@ -159,7 +165,7 @@ function love.draw()
 --Debug
     local fps = 1 / DeltaTime
     love.graphics.print(love.report or "Please wait...")
-    love.graphics.print("FPS: " .. fps,900,30,0,3,3)
+    love.graphics.print("FPS: " .. PlayerTiles.tileVCount,900,30,0,3,3)
 --/Debug
 
 
