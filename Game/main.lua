@@ -17,6 +17,9 @@ require "Game.Scripts.icewall"
 require "Game.Scripts.spikes"
 require "Game.Scripts.rock"
 
+Objects = {}
+ObjectsToDestroy = {}
+
 local Grid = {
                 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
                 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
@@ -38,39 +41,31 @@ local Grid = {
                 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
              }
 
-function love.load() 
+function love.load()
+--Debug
     love.profiler = require('Game.Engine.profile') 
     love.profiler.start()
-
+--/Debug
 
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setBackgroundColor(0, 0.66, 0)
-    Objects = {}
-    ObjectsToDestroy = {}
     
     
     Tiles = TileMap("Assets/TileMap.png",64,64,4,8,1)
     PlayerTiles = TileMap("Assets/MainCharacterAnim.png",64,64,4,8,1)
     Animations = TileMap("Assets/Animations.png",64,64,4,8,1)
 
-
     Player = Player("Player", "character", PlayerTiles, 1, 1, 1, 0, 0, 0, true, true, 24, 10, true, 1)
     table.insert(Objects,Player)
-    size = 64
-    width = 6
-    height = 6
-    --for i = -size * width, size * width, size do
-    --    for j = -size * height, size * height, size do
-    --        if math.abs(i) == size * width or math.abs(j) == size * height then
-    --            table.insert(Objects,GameObject("Box", "box", Tiles, 4, 1, 1, i, j, 0, false, true, 64, 64, true, j))    
-    --        end
-    --    end
-    --end
+
+
     table.insert(Objects, Spike("SpikeTrap", "spikes",  Tiles, 5, 1, 1, 128, 128, 0, true, false, Tiles.tileWidth, 28, true, 128))   
     table.insert(Objects, Spike("SpikeTrap", "spikes",  Tiles, 5, 1, 1, -128, -128, 0, true, false, Tiles.tileWidth, 28, true, -128))
     table.insert(Objects, Rock("Rock", "rocks",  Tiles, 8, 1, 1, -128, 128, 0, true, false, 54, 20, true, 128))   
     table.insert(Objects, Rock("Rock", "rocks",  Tiles, 8, 1, 1, 128, -128, 0, true, false, 54, 20, true, -128))
-    Text = TextUI("Title", "text",  "The Game",100, 5, 5, WindowWidth/2, 100, 0, true, 0)
+
+
+    Text = TextUI("Title", "text", "The Game", 100, 5, 5, WindowWidth/2, 100, 0, true, 0)
     Text:SetColor(100,255,200,255)
     table.insert(Objects, Text)
 end

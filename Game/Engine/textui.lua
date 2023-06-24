@@ -6,6 +6,7 @@ function TextUI:new(name, tag, message, textBoxWidth, xScale, yScale, xPos, yPos
     self.textBoxWidth = textBoxWidth
     self:SetPivot(textBoxWidth/2,0)
     self.isUI = true;
+    self.zIndex = zIndex
 end
 
 function TextUI:draw()
@@ -13,7 +14,7 @@ function TextUI:draw()
         return
     end
     TextUI.super.draw(self)
-    self.message = Player.health
+    love.graphics.printf(self.message, self.xPos, self.yPos, self.textBoxWidth, "center", self.rotation, self.xScale, self.yScale, self.xPivot, self.yPivot)
 end
 
 function TextUI:update(dt)
